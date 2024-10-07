@@ -36,37 +36,41 @@
                                 <div class="d-flex flex-column h-100">
                                     <div class="mb-4 mb-md-5 text-center">
                                         <a href="index.html" class="d-block auth-logo">
-                                            <img src="<?= base_url() ?>assets/tmp-admin/images/logo-sm.svg" alt="" height="28"> <span class="logo-txt">Minia</span>
+                                            <img src="<?= base_url() ?>assets/tmp-admin/images/logo-sm.svg" alt="" height="28"> <span class="logo-txt">CICO</span>
                                         </a>
                                     </div>
                                     <div class="auth-content my-auto">
                                         <div class="text-center">
-                                            <h5 class="mb-0">Welcome Back !</h5>
-                                            <p class="text-muted mt-2">Sign in to continue to Minia.</p>
+                                            <h5 class="mb-0">Selamat Datang !</h5>
+                                            <p class="text-muted mt-2">Login dengan akun untuk melanjutkan!</p>
+                                            <?= $this->session->flashdata('pesan'); ?>
                                         </div>
-                                        <form class="mt-4 pt-2" action="index.html">
+                                        <form class="mt-4 pt-2" method="post" action="<?= base_url('Auth'); ?>">
                                             <div class="mb-3">
                                                 <label class="form-label">Username</label>
-                                                <input type="text" class="form-control" id="username" placeholder="Enter username">
+                                                <input type="text" class="form-control" id="username" placeholder="Masukan username" name="username">
+                                                <?= form_error('username','<small class="text-danger pl-3">', '</small>'); ?>
                                             </div>
                                             <div class="mb-3">
                                                 <div class="d-flex align-items-start">
                                                     <div class="flex-grow-1">
                                                         <label class="form-label">Password</label>
                                                     </div>
-                                                    <div class="flex-shrink-0">
+                                                   <!--  <div class="flex-shrink-0">
                                                         <div class="">
                                                             <a href="auth-recoverpw.html" class="text-muted">Forgot password?</a>
                                                         </div>
-                                                    </div>
+                                                    </div> -->
                                                 </div>
                                                 
                                                 <div class="input-group auth-pass-inputgroup">
-                                                    <input type="password" class="form-control" placeholder="Enter password" aria-label="Password" aria-describedby="password-addon">
-                                                    <button class="btn btn-light shadow-none ms-0" type="button" id="password-addon"><i class="mdi mdi-eye-outline"></i></button>
+                                                    <input type="password" class="form-control" placeholder="Masukan password" aria-label="Password" name="password" aria-describedby="password-addon">
+                                                    <button class="btn btn-light shadow-none ms-0" type="button" id="password-addon"><i class="mdi mdi-eye-outline"></i></button><br>
+                                                    
                                                 </div>
+                                                <?= form_error('password','<small class="text-danger pl-3">', '</small>'); ?>
                                             </div>
-                                            <div class="row mb-4">
+                                            <!-- <div class="row mb-4">
                                                 <div class="col">
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="checkbox" id="remember-check">
@@ -76,9 +80,10 @@
                                                     </div>  
                                                 </div>
                                                 
-                                            </div>
+                                            </div> -->
                                             <div class="mb-3">
-                                                <a href="<?= base_url('Admin'); ?>" class="btn btn-primary w-100 waves-effect waves-light">Login</a>
+                                                <button type="submit" class="btn btn-primary w-100 waves-effect waves-light">Login</button>
+                                                <!-- <a href="<?= base_url('Admin'); ?>" class="btn btn-primary w-100 waves-effect waves-light">Login</a> -->
                                             </div>
                                         </form>
 
@@ -110,8 +115,8 @@
                                         </div> -->
 
                                         <div class="mt-5 text-center">
-                                            <p class="text-muted mb-0">Don't have an account ? <a href="auth-register.html"
-                                                    class="text-primary fw-semibold"> Signup now </a> </p>
+                                            <p class="text-muted mb-0">Belum punya akun ? <a href="<?= base_url('Auth/register'); ?>"
+                                                    class="text-primary fw-semibold"> Daftar sekarang! </a> </p>
                                         </div>
                                     </div>
                                     
@@ -125,7 +130,7 @@
                 </div>
                 <!-- end row -->
             </div>
-            <!-- end container fluid -->
+            <!-- end container fluids -->
         </div>
 
 
@@ -141,6 +146,20 @@
         <script src="<?= base_url() ?>assets/tmp-admin/js/pace.min.js"></script>
         <!-- password addon init -->
         <script src="<?= base_url() ?>assets/tmp-admin/js/pass-addon.init.js"></script>
+
+        <script>
+            $('.alert').alert().delay(2000).slideUp('slow');
+        </script>
+
+        <script>
+            // Menggunakan jQuery jika Anda sudah menyertakan jQuery di project
+            $(document).ready(function() {
+                // Mengatur waktu delay (misalnya 3 detik = 3000 milidetik)
+                setTimeout(function() {
+                    $('.alert-message').fadeOut('slow');
+                }, 3000); // 3000 milidetik = 3 detik
+            });
+        </script>
 
     </body>
 

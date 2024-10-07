@@ -235,6 +235,20 @@
         });
        </script>
 
+        <!-- <script>
+            $('.alert').alert().delay(2000).slideUp('slow');
+        </script> -->
+
+        <script>
+            // Menggunakan jQuery jika Anda sudah menyertakan jQuery di project
+            $(document).ready(function() {
+                // Mengatur waktu delay (misalnya 3 detik = 3000 milidetik)
+                setTimeout(function() {
+                    $('.alert-message').fadeOut('slow');
+                }, 3000); // 3000 milidetik = 3 detik
+            });
+        </script>
+
     </body>
 
 </html>
