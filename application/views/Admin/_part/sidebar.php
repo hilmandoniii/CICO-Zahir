@@ -19,7 +19,14 @@
             <li>
                 <a href="<?= base_url('Admin/akun'); ?>">
                     <i data-feather="users"></i>
-                    <span data-key="t-dashboard">Akun</span>
+                    <span data-key="t-akun">Akun</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="<?= base_url('Admin/kategori'); ?>">
+                    <i data-feather="list"></i>
+                    <span data-key="t-kategori">Kategori</span>
                 </a>
             </li>
 
@@ -31,7 +38,7 @@
             </li>
 
 
-            <li>
+            <!-- <li>
                 <a href="javascript: void(0);" class="has-arrow">
                     <i data-feather="users"></i>
                     <span data-key="t-authentication">Authentication</span>
@@ -53,7 +60,7 @@
                     <li><a href="pages-404.html" data-key="t-error-404">Error 404</a></li>
                     
                 </ul>
-            </li>
+            </li> -->
 
           
             
@@ -68,7 +75,7 @@
 
             
 
-            <li>
+            <!-- <li>
                 <a href="javascript: void(0);" class="has-arrow">
                     <i data-feather="share-2"></i>
                     <span data-key="t-multi-level">Multi Level</span>
@@ -83,7 +90,7 @@
                         </ul>
                     </li>
                 </ul>
-            </li>
+            </li> -->
 
         </ul>
 

@@ -7,12 +7,12 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                                    <h4 class="mb-sm-0 font-size-18">Informasi Akun</h4>
+                                    <h4 class="mb-sm-0 font-size-18">Kategori</h4>
 
                                     <div class="page-title-right">
                                         <ol class="breadcrumb m-0">
-                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Informasi Akun</a></li>
-                                            <li class="breadcrumb-item active">Informasi Akun</li>
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Kategori</a></li>
+                                            <li class="breadcrumb-item active">Kategori</li>
                                         </ol>
                                     </div>
 
@@ -25,33 +25,28 @@
                             <div class="col-md-12">
                                         <div class="card">
                                             <div class="card-body">
-                                                <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#tambahAkun">Tambah Akun</button>
+                                                <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#tambahKategori">Tambah Kategori</button>
                                                 <div class="table-responsive">
                                                   <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                                     <thead>
                                                       <tr>
-                                                        <th>Code Akun</th>
-                                                        <th>Nama</th>
-                                                        <th>Tipe</th>
+                                                        <th>Code Kategori</th>
+                                                        <th>Nama Kategori</th>
                                                         <th>Aksi</th>
-                                                        
                                                       </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <?php if (!empty($akuns)): ?>
-                                                            <?php foreach ($akuns as $akun): ?>
+                                                        <?php if (!empty($kategori)): ?>
+                                                            <?php foreach ($kategori as $kat): ?>
                                                                 <tr>
-                                                                    <td><?= $akun['kodeAkun']; ?></td>
-                                                                    <td><?= $akun['namaAkun']; ?></td>
-                                                                    <td><?= $akun['tipeAkun']; ?></td>
+                                                                    <td><?= $kat['codeKat']; ?></td>
+                                                                    <td><?= $kat['namaKat']; ?></td>
                                                                     <td>
-                                                                        
-                                                                            <a href="<?= base_url('Admin/editAkun/' . $akun['kodeAkun']); ?>" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i> Edit</a>
-                                                                            <a href="<?= base_url('Admin/hapusAkun/' . $akun['kodeAkun']); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus akun ini?');"><i class="fas fa-trash"></i> Hapus</a>
-                                                                        
-                                                                      </td>
-                                                                    
-                                                                    
+                                                                            
+                                                                        <a href="<?= base_url('Admin/editKategori/' . $kat['codeKat']); ?>" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i> Edit</a>
+                                                                        <a href="<?= base_url('Admin/hapusKategori/' . $kat['codeKat']); ?>" onclick="return confirm('Apakah Anda yakin ingin menghapus kategori ini?');" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Hapus</a>
+                                                                            
+                                                                    </td>
                                                                 </tr>
                                                             <?php endforeach; ?>
                                                         <?php else: ?>
@@ -59,6 +54,7 @@
                                                                 <td colspan="3" class="text-center">Tidak ada data akun.</td>
                                                             </tr>
                                                         <?php endif; ?>
+
                                                       
                                                     </tbody>
                                                   </table>
@@ -81,32 +77,22 @@
 
 
                 <!-- Modal -->
-                <div class="modal fade" id="tambahAkun" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal fade" id="tambahKategori" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                   <div class="modal-dialog">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Tambah Akun</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Tambah Kategori</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                       </div>
                       <div class="modal-body">
-                                <form action="<?= base_url('Admin/akun'); ?>" method="post">
-                                    <div class="form-group mb-3">
-                                        <label>Tipe Akun</label>
-                                        <select class="form-select" name="tipeAkun">
-                                            <option value="#">Pilih Tipe Akun</option>
-                                            <option value="BCA">BCA</option>
-                                            <option value="BNI">BNI</option>
-                                            <option value="BTN">BTN</option>
-                                            <option value="BRI">BRI</option>
-                                            <option value="Mandiri">Mandiri</option>
-                                        </select>
-                                    </div> 
+                                <form action="<?= base_url('Admin/kategori'); ?>" method="post">
+                                     
                                     <div class="mb-3">
-                                        <label>Nama Akun</label>
+                                        <label>Nama Kategori</label>
                                         <div class="input-group">
-                                            <input type="text" class="form-control" placeholder="Nama Akun" name="nama">
+                                            <input type="text" class="form-control" placeholder="Nama Kategori" name="namaKat">
                                         </div>
-                                        <?= form_error('nama','<small class="text-danger pl-3">', '</small>'); ?>
+                                        <?= form_error('namaKat','<small class="text-danger pl-3">', '</small>'); ?>
                                     </div>
 
                                     <button type="submit" class="btn btn-primary">Submit</button>

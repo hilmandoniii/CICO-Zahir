@@ -9,7 +9,7 @@ class Auth extends CI_Controller {
         parent::__construct();
         $this->load->model('ModelUser');
         
-        //var_dump($this->ModelBooking->kodeotomatis('pinjam'));
+        //var_dump($this->ModelBooking->kodeotomatis('pinjam'));;
     }
 
 
