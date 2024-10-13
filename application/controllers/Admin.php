@@ -8,7 +8,7 @@ class Admin extends CI_Controller {
 		parent::__construct();
 		//Load Dependencies
 		is_logged_in();
-		$this->load->model(['ModelUser','ModelAkun']);
+		$this->load->model(['ModelUser','ModelAkun','ModelTransaksi']);
 		
 	}
 
@@ -112,7 +112,6 @@ class Admin extends CI_Controller {
     }
 
     // CRUD Kategori
-
     public function kategori()
     {
         $data['judul'] = 'Akun';
@@ -214,17 +213,65 @@ class Admin extends CI_Controller {
 
     }
 
+    // CRUD Transaksi
 	public function transaksi()
 	{
 		$data['judul'] = 'Transaksi';
 		$data['user'] = $this->ModelUser->cekData(['username' => $this->session->userdata('username')])->row_array();
+        $data['transaksi'] = $this->ModelTransaksi->getTransaksiWithDetails(); // Mengambil data dengan detail kategori dan akun
+        $data['akuns'] = $this->ModelAkun->getAkun()->result_array(); 
+        $data['kategori'] = $this->ModelAkun->getKategori()->result_array(); 
 
-		$this->load->view('Admin/_part/head', $data);
-        $this->load->view('Admin/_part/topbar', $data);
-        $this->load->view('Admin/_part/sidebar', $data);
-        $this->load->view('Admin/transaksi', $data);
-        $this->load->view('Admin/_part/footer', $data);
+        $this->form_validation->set_rules('kodeAkun', 'Akun', 'required');
+        $this->form_validation->set_rules('codeKat', 'Kategori', 'required');
+        $this->form_validation->set_rules('tipeTransaksi', 'Tipe Transaksi', 'required');
+        $this->form_validation->set_rules('tglTransaksi', 'Tanggal Transaksi', 'required');
+        $this->form_validation->set_rules('nominal', 'Nominal', 'required|numeric');
+        $this->form_validation->set_rules('keterangan', 'Keterangan', 'required');
+
+        if ($this->form_validation->run() == false) {
+            $this->load->view('Admin/_part/head', $data);
+            $this->load->view('Admin/_part/topbar', $data);
+            $this->load->view('Admin/_part/sidebar', $data);
+            $this->load->view('Admin/transaksi', $data);
+            $this->load->view('Admin/_part/footer', $data);
+        } else {
+            $nomerTransaksi = $this->ModelTransaksi->generateNomorTransaksi();
+
+            $data = [
+                'nomorTransaksi' => $nomerTransaksi,
+                'tglTransaksi' => $this->input->post('tglTransaksi', true),
+                'codeKat' => $this->input->post('codeKat', true),
+                'kodeAkun' => $this->input->post('kodeAkun', true),
+                'tipeTransaksi' => $this->input->post('tipeTransaksi', true),
+                'nominal' => $this->input->post('nominal', true),
+                'keterangan' => $this->input->post('keterangan', true)
+            ];
+
+            $this->ModelTransaksi->insertTransaksi($data);
+            $this->session->set_flashdata('success', 'Transaksi berhasil ditambahkan.');
+            redirect('Admin/transaksi');
+        }
 	}
+
+    // private function generateNomorTransaksi()
+    // {
+    //     $this->db->select('nomerTransaksi');
+    //     $this->db->order_by('nomerTransaksi', 'DESC');
+    //     $this->db->limit(1);
+    //     $query = $this->db->get('transaksi');
+
+    //     if ($query->num_rows() > 0) {
+    //         $row = $query->row();
+    //         $lastCode = $row->nomerTransaksi;
+    //         $number = (int) substr($lastCode, 2) + 1;
+    //         $newCode = 'TR' . sprintf('%04d', $number);
+    //     } else {
+    //         $newCode = 'TR0001';
+    //     }
+
+    //     return $newCode;
+    // }
 
 	public function kelolaProfil()
 	{
