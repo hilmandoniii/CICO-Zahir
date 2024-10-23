@@ -56,7 +56,7 @@
                                                             <?php endforeach; ?>
                                                         <?php else: ?>
                                                             <tr>
-                                                                <td colspan="3" class="text-center">Tidak ada data akun.</td>
+                                                                <td colspan="4" class="text-center">Tidak ada data akun.</td>
                                                             </tr>
                                                         <?php endif; ?>
                                                       

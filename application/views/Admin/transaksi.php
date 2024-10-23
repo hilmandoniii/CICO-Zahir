@@ -34,6 +34,7 @@
                                                         <th>Tipe Transaksi</th>
                                                         <th>Nominal</th>
                                                         <th>Tanggal Transaksi</th>
+                                                        <th>Aksi</th>
                                                         
                                                       </tr>
                                                     </thead>
@@ -41,7 +42,19 @@
                                                         <?php if (!empty($transaksi)): ?>
                                                             <?php foreach ($transaksi as $tr): ?>
                                                                 <tr>
-                                                                    <td><?= $tr['nomorTransaksi']; ?></td>
+                                                                    <td>
+                                                                        <a href="<?= base_url('Admin/detailTransaksi/' . $tr['nomorTransaksi']); ?>">
+                                                                            <?= $tr['nomorTransaksi']; ?>
+                                                                        </a>
+
+                                                                        <!-- <a href="#" data-bs-toggle="modal" data-bs-target="#detailModal-<?= $tr['nomorTransaksi']; ?>">
+                                                                            <?= $tr['nomorTransaksi']; ?>
+                                                                        </a> -->
+
+                                                                         <!-- <a href="<?= base_url('Admin/transaksi?nomorTransaksi=') . $tr['nomorTransaksi']; ?>">
+                                                                            <?= $tr['nomorTransaksi']; ?> -->
+                                                                        </a>
+                                                                    </td>
                                                                     <td><?= $tr['namaAkun']; ?> - <?= $tr['tipeAkun']; ?></td>
                                                                     <td>
                                                                         <?php if ($tr['tipeTransaksi'] == 'Pengeluaran'): ?>
@@ -51,13 +64,21 @@
                                                                         <?php endif; ?>
                                                                     </td>
                                                                     <td>Rp. <?= number_format($tr['nominal'], 0, ',', '.'); ?></td>
-                                                                    <td><?= date('d-m-Y', strtotime($tr['tglTransaksi'])); ?></td>
+                                                                    <td><?= date('d-F-Y | H:i:s', strtotime($tr['tglTransaksi'])); ?></td>
+                                                                    <td>
+                                                                        <a href="#" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i> Edit</a>
+                                                                        <a href="<?= base_url('Admin/hapusTransaksi/' . $tr['nomorTransaksi']); ?>" 
+                                                                           class="btn btn-danger btn-sm" 
+                                                                           onclick="return confirm('Apakah Anda yakin ingin menghapus transaksi ini?');">
+                                                                           <i class="fas fa-trash"></i> Hapus
+                                                                        </a>
+                                                                    </td>
                                                                     
                                                                 </tr>
                                                             <?php endforeach; ?>
                                                         <?php else: ?>
                                                             <tr>
-                                                                <td colspan="3" class="text-center">Tidak ada data akun.</td>
+                                                                <td colspan="6" class="text-center">Tidak ada data akun.</td>
                                                             </tr>
                                                         <?php endif; ?>
                                                       
@@ -173,6 +194,44 @@
                     </div>
                   </div>
                 </div>
+
+
+                <!-- <?php if (isset($detailTransaksi)): ?>
+                <div class="modal fade show" id="detailModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                    
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Detail Transaksi</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <div class="card-body">
+                            <div class="col-sm-12 mb-4">
+                                                            <div class="row">
+                                                                <div class="col-sm-12">
+                                                                    
+                                                                        <div class="col-sd-12">
+                                                                            <div class="row mb-3">
+                                                                                <div class="col-sm-12">
+                                                                                    <h6><strong>Nomer Transaksi</strong></h6>
+                                                                                    <small><?= $detailTransaksi['nomorTransaksi']; ?></small>
+                                                                                    
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                        
+
+                        </div>
+                      </div>
+                    
+                    </div>
+                  </div>
+                </div>
+                <?php endif; ?> -->
 
 
                 

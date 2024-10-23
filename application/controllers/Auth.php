@@ -71,7 +71,10 @@ class Auth extends CI_Controller {
                 // maka buat session userdata
                 $session = [
                     'username'      => $user['username'],
+                    'codeUser'      => $user['codeUser']
                 ];
+
+                
 
                 $this->session->set_userdata($session);
                 $this->session->set_flashdata('pesan','<div class="alert alert-primary alert-message" role="alert">
@@ -138,7 +141,9 @@ class Auth extends CI_Controller {
             
         } else {
             $email = $this->input->post('email', true);
+            $codeUser = $this->generateCodeUser();
             $data = [
+                'codeUser' => $codeUser,
                 'nama' => htmlspecialchars($this->input->post('nama', true)),
                 'username' => htmlspecialchars($this->input->post('username', true)),
                 'email' => htmlspecialchars($email),
@@ -154,6 +159,30 @@ class Auth extends CI_Controller {
         }
 		
 	}
+
+    private function generateCodeUser()
+    {
+        // Ambil codeUser terakhir dari database
+        $lastUser = $this->db->select('codeUser')
+                             ->order_by('codeUser', 'DESC')
+                             ->limit(1)
+                             ->get('user')
+                             ->row_array();
+
+        if ($lastUser) {
+            // Ambil angka dari codeUser terakhir, misal US0001 -> 1
+            $lastNumber = intval(substr($lastUser['codeUser'], 2));
+            // Increment angka tersebut
+            $newNumber = $lastNumber + 1;
+            // Format ulang menjadi US000X
+            $newCodeUser = 'US' . str_pad($newNumber, 4, '0', STR_PAD_LEFT);
+        } else {
+            // Jika belum ada data, buat yang pertama
+            $newCodeUser = 'US0001';
+        }
+
+        return $newCodeUser;
+    }
 
     public function logout()
     {

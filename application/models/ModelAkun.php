@@ -11,9 +11,17 @@ class ModelAKun extends CI_Model
         $this->db->insert('akun', $data);
     }
 
-    public function getAkun()
+    // public function getAkun()
+    // {
+    //     return $this->db->get('akun');
+    // }
+
+    public function getAkun($codeUser = null)
     {
-        return $this->db->get('akun');
+        if ($codeUser) {
+            $this->db->where('codeUser', $codeUser); // Filter akun berdasarkan codeUser
+        }
+        return $this->db->get('akun'); // Nama tabel adalah 'akun'
     }
 
     public function getLastKodeAkun()
@@ -49,9 +57,17 @@ class ModelAKun extends CI_Model
         $this->db->insert('kategori', $data);
     }
 
-    public function getKategori()
+    // public function getKategori()
+    // {
+    //     return $this->db->get('kategori');
+    // }
+
+    public function getKategori($codeUser = null)
     {
-        return $this->db->get('kategori');
+        if ($codeUser) {
+            $this->db->where('codeUser', $codeUser); // Filter akun berdasarkan codeUser
+        }
+        return $this->db->get('kategori'); // Nama tabel adalah 'akun'
     }
 
     public function getKatByCode($codeKat)

@@ -94,6 +94,25 @@
 
         </ul>
 
+        <ul class="metismenu list-unstyled" id="side-menu">
+            <li class="menu-title" data-key="t-menu">Laporan</li>
+
+            <li>
+                <a href="#">
+                    <i data-feather="file-text"></i>
+                    <span data-key="t-laporantransaksi">Laporan Transaksi</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="#">
+                    <i data-feather="file"></i>
+                    <span data-key="t-laporansaldo">Laporan Saldo</span>
+                </a>
+            </li>
+
+        </ul>
+
     </div>
     <!-- Sidebar -->
 </div>

@@ -30,8 +30,10 @@ class Admin extends CI_Controller {
 	{
 
 		$data['judul'] = 'Akun';
+        $codeUser = $this->session->userdata('codeUser');
 		$data['user'] = $this->ModelUser->cekData(['username' => $this->session->userdata('username')])->row_array();
-        $data['akuns'] = $this->ModelAkun->getAkun()->result_array();
+        // $data['akuns'] = $this->ModelAkun->getAkun()->result_array();
+        $data['akuns'] = $this->ModelAkun->getAkun($codeUser)->result_array();
 
         $this->form_validation->set_rules('nama', 'Nama Akun', 'required', [
             'required' => 'Nama Akun Belum diis!!'
@@ -45,10 +47,11 @@ class Admin extends CI_Controller {
             $this->load->view('Admin/_part/footer', $data);
         } else {
 
-            $kodeAkunBaru = $this->generateKodeAkun();
+            $kodeAkunBaru = $this->generateKodeAkun($codeUser);
 
             $data = [
                 'kodeAkun' => $kodeAkunBaru,
+                'codeUser' => $codeUser,
                 'tipeAkun' => $this->input->post('tipeAkun', true),
                 'namaAkun' => $this->input->post('nama', true),
                 'created_at' => date('Y-m-d H:i:s')
@@ -59,7 +62,6 @@ class Admin extends CI_Controller {
             redirect('Admin/akun');
         }
 
-		
 	}
 
     public function editAkun($kodeAkun)
@@ -111,12 +113,28 @@ class Admin extends CI_Controller {
         redirect('Admin/akun');
     }
 
+    private function generateKodeAkun($codeUser)
+    {
+        // Hitung jumlah akun yang sudah ada untuk codeUser ini
+        $this->db->where('codeUser', $codeUser);
+        $totalAkun = $this->db->count_all_results('akun');
+
+        // Tambahkan 1 untuk mendapatkan nomor akun baru
+        $newNumber = $totalAkun + 1;
+
+        // Format kodeAkun baru
+        return 'CA' . str_pad($newNumber, 2, '0', STR_PAD_LEFT) . '-' . $codeUser;
+    }
+
     // CRUD Kategori
     public function kategori()
     {
         $data['judul'] = 'Akun';
+        $codeUser = $this->session->userdata('codeUser');
         $data['user'] = $this->ModelUser->cekData(['username' => $this->session->userdata('username')])->row_array();
-        $data['kategori'] = $this->ModelAkun->getKategori()->result_array();
+        // $data['akuns'] = $this->ModelAkun->getAkun()->result_array();
+        $data['kategori'] = $this->ModelAkun->getKategori($codeUser)->result_array();
+       
 
         $this->form_validation->set_rules('namaKat', 'Nama Kategori', 'required', [
             'required' => 'Nama Kategori Belum diis!!'
@@ -130,10 +148,11 @@ class Admin extends CI_Controller {
             $this->load->view('Admin/_part/footer', $data);
         } else {
 
-            $kodeBaru = $this->generateKodeKategori();
+            $kodeBaru = $this->generateKodeKategori($codeUser);
 
             $data = [
                 'codeKat' => $kodeBaru,
+                'codeUser' => $codeUser,
                 'namaKat' => $this->input->post('namaKat', true),
                 'created_at' => date('Y-m-d H:i:s')
             ];
@@ -146,23 +165,33 @@ class Admin extends CI_Controller {
         
     }
 
-    private function generateKodeKategori()
+    private function generateKodeKategori($codeUser)
     {
-        $this->db->select('codeKat');
-        $this->db->order_by('codeKat', 'DESC');
-        $this->db->limit(1);
-        $query = $this->db->get('kategori');
 
-        if ($query->num_rows() > 0) {
-            $row = $query->row();
-            $lastCode = $row->codeKat;
-            $number = (int) substr($lastCode, 3) + 1;
-            $newCode = 'KAT' . sprintf('%03d', $number);
-        } else {
-            $newCode = 'KAT001';
-        }
+        // Hitung jumlah akun yang sudah ada untuk codeUser ini
+        $this->db->where('codeUser', $codeUser);
+        $totalKat = $this->db->count_all_results('kategori');
 
-        return $newCode;
+        // Tambahkan 1 untuk mendapatkan nomor akun baru
+        $newNumber = $totalKat + 1;
+
+        // Format kodeAkun baru
+        return 'KA' . str_pad($newNumber, 2, '0', STR_PAD_LEFT) . '-' . $codeUser;
+        // $this->db->select('codeKat');
+        // $this->db->order_by('codeKat', 'DESC');
+        // $this->db->limit(1);
+        // $query = $this->db->get('kategori');
+
+        // if ($query->num_rows() > 0) {
+        //     $row = $query->row();
+        //     $lastCode = $row->codeKat;
+        //     $number = (int) substr($lastCode, 3) + 1;
+        //     $newCode = 'KAT' . sprintf('%03d', $number);
+        // } else {
+        //     $newCode = 'KAT001';
+        // }
+
+        // return $newCode;
     }
 
     public function hapusKategori($codeKat)
@@ -220,7 +249,13 @@ class Admin extends CI_Controller {
 		$data['user'] = $this->ModelUser->cekData(['username' => $this->session->userdata('username')])->row_array();
         $data['transaksi'] = $this->ModelTransaksi->getTransaksiWithDetails(); // Mengambil data dengan detail kategori dan akun
         $data['akuns'] = $this->ModelAkun->getAkun()->result_array(); 
-        $data['kategori'] = $this->ModelAkun->getKategori()->result_array(); 
+        $data['kategori'] = $this->ModelAkun->getKategori()->result_array();
+        
+
+        // $nomorTransaksi = $this->input->get('nomorTransaksi');
+        // if ($nomorTransaksi) {
+        //     $data['detailTransaksi'] = $this->ModelTransaksi->getDetailTransaksi($nomorTransaksi);
+        // }
 
         $this->form_validation->set_rules('kodeAkun', 'Akun', 'required');
         $this->form_validation->set_rules('codeKat', 'Kategori', 'required');
@@ -238,9 +273,15 @@ class Admin extends CI_Controller {
         } else {
             $nomerTransaksi = $this->ModelTransaksi->generateNomorTransaksi();
 
+            // Ambil input tanggal dari form
+            $tglTransaksi = $this->input->post('tglTransaksi', true);
+
+            // Gabungkan tanggal dari input dengan waktu (misal: waktu saat ini)
+            $tanggalLengkap = $tglTransaksi . ' ' . date('H:i:s');
+
             $data = [
                 'nomorTransaksi' => $nomerTransaksi,
-                'tglTransaksi' => $this->input->post('tglTransaksi', true),
+                'tglTransaksi' => $tanggalLengkap,
                 'codeKat' => $this->input->post('codeKat', true),
                 'kodeAkun' => $this->input->post('kodeAkun', true),
                 'tipeTransaksi' => $this->input->post('tipeTransaksi', true),
@@ -253,6 +294,35 @@ class Admin extends CI_Controller {
             redirect('Admin/transaksi');
         }
 	}
+
+    public function hapusTransaksi($nomorTransaksi)
+    {
+        // Panggil metode deleteTransaksi dari model
+        $hapus = $this->ModelTransaksi->deleteTransaksi($nomorTransaksi);
+
+        if ($hapus) {
+            $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-message" role="alert">Transaksi berhasil dihapus.</div>');
+            // $this->session->set_flashdata('success', 'Transaksi berhasil dihapus.');
+        } else {
+            $this->session->set_flashdata('pesan', '<div class="alert alert-danger alert-message" role="alert">Transaksi gagal dihapus</div>');
+        }
+
+        // Redirect ke halaman transaksi setelah menghapus data
+        redirect('Admin/transaksi');
+    }
+
+    public function detailTransaksi($nomorTransaksi)
+    {
+        $data['judul'] = 'Detail Transaksi';
+        $data['user'] = $this->ModelUser->cekData(['username' => $this->session->userdata('username')])->row_array();
+        $data['transaksi'] = $this->ModelTransaksi->getDetailTransaksi($nomorTransaksi);
+
+        $this->load->view('Admin/_part/head', $data);
+        $this->load->view('Admin/_part/topbar', $data);
+        $this->load->view('Admin/_part/sidebar', $data);
+        $this->load->view('Admin/detailTransaksi', $data);
+        $this->load->view('Admin/_part/footer', $data);
+    }
 
     // private function generateNomorTransaksi()
     // {
@@ -439,24 +509,24 @@ class Admin extends CI_Controller {
     }
 
 
-    private function generateKodeAkun()
-    {
-        // Ambil kodeAkun terakhir dari database
-        $lastKodeAkun = $this->ModelAkun->getLastKodeAkun();
+    // private function generateKodeAkun()
+    // {
+    //     // Ambil kodeAkun terakhir dari database
+    //     $lastKodeAkun = $this->ModelAkun->getLastKodeAkun();
 
-        if ($lastKodeAkun) {
-            // Ambil bagian numerik dari kode
-            $number = (int) substr($lastKodeAkun, 2);
+    //     if ($lastKodeAkun) {
+    //         // Ambil bagian numerik dari kode
+    //         $number = (int) substr($lastKodeAkun, 2);
 
-            // Tambahkan 1
-            $number++;
-        } else {
-            $number = 1; // Jika tidak ada data, mulai dari 1
-        }
+    //         // Tambahkan 1
+    //         $number++;
+    //     } else {
+    //         $number = 1; // Jika tidak ada data, mulai dari 1
+    //     }
 
-        // Format kembali menjadi kode baru
-        return 'CA' . str_pad($number, 6, '0', STR_PAD_LEFT);
-    }
+    //     // Format kembali menjadi kode baru
+    //     return 'CA' . str_pad($number, 6, '0', STR_PAD_LEFT);
+    // }
 
 
 

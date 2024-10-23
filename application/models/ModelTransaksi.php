@@ -37,6 +37,23 @@ class ModelTransaksi extends CI_Model
         return $nomorTransaksi;
     }
 
+    public function deleteTransaksi($nomorTransaksi)
+    {
+        $this->db->where('nomorTransaksi', $nomorTransaksi);
+        return $this->db->delete('transaksi');
+    }
+
+    public function getDetailTransaksi($nomorTransaksi)
+    {
+        $this->db->select('transaksi.*, akun.namaAkun, akun.tipeAkun, kategori.namaKat');
+        $this->db->from('transaksi');
+        $this->db->join('akun', 'transaksi.kodeAkun = akun.kodeAkun');
+        $this->db->join('kategori', 'transaksi.codeKat = kategori.codeKat');
+        $this->db->where('transaksi.nomorTransaksi', $nomorTransaksi);
+        $query = $this->db->get();
+        return $query->row_array(); // Mengembalikan satu baris data
+    }
+
 }
 
 /* End of file Petugas_m.php */
