@@ -9,14 +9,26 @@ class ModelTransaksi extends CI_Model
         $this->db->insert('transaksi', $data);
     }
 
-	public function getTransaksiWithDetails()
+	// public function getTransaksiWithDetails()
+    // {
+    //     $this->db->select('transaksi.*, kategori.namaKat, akun.namaAkun, akun.tipeAkun');
+    //     $this->db->from('transaksi');
+    //     $this->db->join('kategori', 'transaksi.codeKat = kategori.codeKat');
+    //     $this->db->join('akun', 'transaksi.kodeAkun = akun.kodeAkun');
+    //     $query = $this->db->get();
+    //     return $query->result_array();
+    // }
+
+    public function getTransaksiWithDetails($codeUser)
     {
         $this->db->select('transaksi.*, kategori.namaKat, akun.namaAkun, akun.tipeAkun');
         $this->db->from('transaksi');
         $this->db->join('kategori', 'transaksi.codeKat = kategori.codeKat');
         $this->db->join('akun', 'transaksi.kodeAkun = akun.kodeAkun');
+        $this->db->where('akun.codeUser', $codeUser);
         $query = $this->db->get();
-        return $query->result_array();
+        
+        return $query->result_array(); // Mengembalikan hasil sebagai array
     }
 
     public function generateNomorTransaksi()
@@ -53,6 +65,8 @@ class ModelTransaksi extends CI_Model
         $query = $this->db->get();
         return $query->row_array(); // Mengembalikan satu baris data
     }
+
+
 
 }
 

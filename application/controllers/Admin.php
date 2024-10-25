@@ -246,11 +246,11 @@ class Admin extends CI_Controller {
 	public function transaksi()
 	{
 		$data['judul'] = 'Transaksi';
+        $codeUser = $this->session->userdata('codeUser');
 		$data['user'] = $this->ModelUser->cekData(['username' => $this->session->userdata('username')])->row_array();
-        $data['transaksi'] = $this->ModelTransaksi->getTransaksiWithDetails(); // Mengambil data dengan detail kategori dan akun
-        $data['akuns'] = $this->ModelAkun->getAkun()->result_array(); 
-        $data['kategori'] = $this->ModelAkun->getKategori()->result_array();
-        
+        $data['transaksi'] = $this->ModelTransaksi->getTransaksiWithDetails($codeUser); // Mengambil data dengan detail kategori dan akun
+        $data['akuns'] = $this->ModelAkun->getAkun($codeUser)->result_array(); 
+        $data['kategori'] = $this->ModelAkun->getKategori($codeUser)->result_array();        
 
         // $nomorTransaksi = $this->input->get('nomorTransaksi');
         // if ($nomorTransaksi) {
@@ -271,7 +271,7 @@ class Admin extends CI_Controller {
             $this->load->view('Admin/transaksi', $data);
             $this->load->view('Admin/_part/footer', $data);
         } else {
-            $nomerTransaksi = $this->ModelTransaksi->generateNomorTransaksi();
+            $nomerTransaksi = $this->generateNomorTransaksi($codeUser);
 
             // Ambil input tanggal dari form
             $tglTransaksi = $this->input->post('tglTransaksi', true);
@@ -281,6 +281,7 @@ class Admin extends CI_Controller {
 
             $data = [
                 'nomorTransaksi' => $nomerTransaksi,
+                'codeUser' => $codeUser,
                 'tglTransaksi' => $tanggalLengkap,
                 'codeKat' => $this->input->post('codeKat', true),
                 'kodeAkun' => $this->input->post('kodeAkun', true),
@@ -322,6 +323,19 @@ class Admin extends CI_Controller {
         $this->load->view('Admin/_part/sidebar', $data);
         $this->load->view('Admin/detailTransaksi', $data);
         $this->load->view('Admin/_part/footer', $data);
+    }
+
+    private function generateNomorTransaksi($codeUser)
+    {
+        // Hitung jumlah transaksi yang sudah ada untuk codeUser ini
+        $this->db->where('codeUser', $codeUser);
+        $totalTransaksi = $this->db->count_all_results('transaksi');
+
+        // Tambahkan 1 untuk mendapatkan nomor transaksi baru
+        $newNumber = $totalTransaksi + 1;
+
+        // Format nomorTransaksi baru
+        return 'TR' . str_pad($newNumber, 4, '0', STR_PAD_LEFT) . '-' . $codeUser;
     }
 
     // private function generateNomorTransaksi()

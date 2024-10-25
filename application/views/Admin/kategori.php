@@ -30,16 +30,17 @@
                                                   <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                                     <thead>
                                                       <tr>
-                                                        <th>Code Kategori</th>
+                                                        <th>No</th>
                                                         <th>Nama Kategori</th>
                                                         <th>Aksi</th>
                                                       </tr>
                                                     </thead>
                                                     <tbody>
                                                         <?php if (!empty($kategori)): ?>
-                                                            <?php foreach ($kategori as $kat): ?>
+                                                            <?php $no = 1;
+                                                                foreach ($kategori as $kat): ?>
                                                                 <tr>
-                                                                    <td><?= $kat['codeKat']; ?></td>
+                                                                    <td><?= $no++; ?></td>
                                                                     <td><?= $kat['namaKat']; ?></td>
                                                                     <td>
                                                                             
@@ -51,7 +52,7 @@
                                                             <?php endforeach; ?>
                                                         <?php else: ?>
                                                             <tr>
-                                                                <td colspan="3" class="text-center">Tidak ada data akun.</td>
+                                                                <td colspan="3" class="text-center">Tidak ada data kategori.</td>
                                                             </tr>
                                                         <?php endif; ?>
 

@@ -21,15 +21,15 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-sm-12">
+                            <div class="col-sm-8">
                                         <div class="card">
                                             <div class="card-body">
                                                 
 
-                                                        <div class="col-sm-12 mb-3">
+                                                        <div class="col-sm-12">
                                                             <div class="row">
                                                                 <div class="col-sm-12">
-                                                                    <p class="fs-5 fw-bold">Detail Transaksi</p><hr><br>
+                                                                    
                                                                         <div class="col-sd-12">
                                                                             <div class="row mb-3">
                                                                                 <div class="col-sm-12">
@@ -67,7 +67,7 @@
                                                                                 </div>
                                                                             </div><hr>
 
-                                                                            <div class="row mb-3">
+                                                                            <div class="row">
                                                                                 <div class="col-sm-6">
                                                                                     <h6><strong>Nominal</strong></h6>
                                                                                     <small>Rp. <?= number_format($transaksi['nominal'], 0, ',', '.'); ?></small>

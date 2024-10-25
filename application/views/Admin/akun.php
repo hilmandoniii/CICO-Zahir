@@ -30,7 +30,7 @@
                                                   <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                                     <thead>
                                                       <tr>
-                                                        <th>Code Akun</th>
+                                                        <th>No</th>
                                                         <th>Nama</th>
                                                         <th>Tipe</th>
                                                         <th>Aksi</th>
@@ -39,9 +39,10 @@
                                                     </thead>
                                                     <tbody>
                                                         <?php if (!empty($akuns)): ?>
-                                                            <?php foreach ($akuns as $akun): ?>
+                                                            <?php $no = 1;
+                                                            foreach ($akuns as $akun): ?>
                                                                 <tr>
-                                                                    <td><?= $akun['kodeAkun']; ?></td>
+                                                                    <td><?= $no++; ?></td>
                                                                     <td><?= $akun['namaAkun']; ?></td>
                                                                     <td><?= $akun['tipeAkun']; ?></td>
                                                                     <td>
