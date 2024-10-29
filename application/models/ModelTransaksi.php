@@ -66,6 +66,50 @@ class ModelTransaksi extends CI_Model
         return $query->row_array(); // Mengembalikan satu baris data
     }
 
+    public function getLaporan($codeUser)
+    {
+        $this->db->select('transaksi.*, kategori.namaKat, akun.namaAkun, akun.tipeAkun, user.username, user.nama');
+        $this->db->from('transaksi');
+        $this->db->join('kategori', 'transaksi.codeKat = kategori.codeKat');
+        $this->db->join('akun', 'transaksi.kodeAkun = akun.kodeAkun');
+        $this->db->join('user', 'akun.codeUser = user.codeUser'); // Menghubungkan tabel user melalui codeUser
+        $this->db->where('akun.codeUser', $codeUser);
+        $query = $this->db->get();
+
+        return $query->result_array(); // Mengembalikan hasil sebagai array
+    }
+
+    public function getLaporanSaldo($codeUser, $tanggalAwal = null, $tanggalAkhir = null, $tipeAkun = null)
+    {
+        $this->db->select('*');
+        $this->db->from('transaksi');
+        $this->db->join('akun', 'transaksi.kodeAkun = akun.kodeAkun');
+        $this->db->join('kategori', 'transaksi.codeKat = kategori.codeKat');
+        $this->db->where('transaksi.codeUser', $codeUser);
+
+        // Tambahkan filter tanggal jika diisi
+        if (!empty($tanggalAwal) && !empty($tanggalAkhir)) {
+            $this->db->where('tglTransaksi >=', $tanggalAwal);
+            $this->db->where('tglTransaksi <=', $tanggalAkhir);
+        }
+
+        // Tambahkan filter tipe akun jika diisi
+        if (!empty($tipeAkun)) {
+            $this->db->where('akun.tipeAkun', $tipeAkun);
+        }
+
+        return $this->db->get()->result_array();
+    }
+
+    public function getTipeAkunByUser($codeUser)
+    {
+        $this->db->select('tipeAkun');
+        $this->db->from('akun');
+        $this->db->where('codeUser', $codeUser);
+        $this->db->group_by('tipeAkun');
+        return $this->db->get()->result_array();
+    }
+
 
 
 }

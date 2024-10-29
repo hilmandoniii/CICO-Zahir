@@ -189,19 +189,9 @@
         <script src="<?= base_url('assets/') ?>table/extra/pdfmake.min.js" crossorigin="anonymous"></script>
         <script src="<?= base_url('assets/') ?>table/extra/vfs_fonts.js" crossorigin="anonymous"></script>
         <script src="<?= base_url('assets/') ?>table/extra/buttons.html5.min.js" crossorigin="anonymous"></script>
-      <!-- script -->
+        <!-- script -->
 
-       <script>
-        $(document).ready(function() {
-            // Inisialisasi untuk tabel pertama
-            $('#dataTable1').DataTable();
-            
-            // Inisialisasi untuk tabel kedua
-            $('#dataTable2').DataTable();
-        });   
-       </script>
-
-       <script type="text/javascript" class="init">
+       <!-- <script type="text/javascript" class="init">
         $(document).ready(function() {
           $('#exampleLaporan').DataTable({
             dom: 'Bfrtip',
@@ -233,6 +223,113 @@
             ]
           });
         });
+       </script> -->
+
+       <script type="text/javascript" class="init">
+            $(document).ready(function() {
+                $('#exampleLaporan').DataTable({
+                    dom: '<"row"<"col-sm-12 mb-3"B>>' +            // Baris pertama untuk tombol export di atas
+                         '<"row"<"col-sm-6"l><"col-sm-6"f>>' + // Baris kedua untuk "show entries" di kiri dan search di kanan
+                         '<"row"<"col-sm-12"tr>>' +            // Baris ketiga untuk tabel data
+                         '<"row"<"col-sm-5"i><"col-sm-7"p>>',  // Baris keempat untuk informasi dan pagination di bawah
+                    buttons: [
+                        {
+                            extend: 'print',
+                            title: 'Laporan Transaksi',
+                            className: 'btn btn-light',
+                            customize: function(win) {
+                                
+
+                                $(win.document.body).find('table')
+                                    .addClass('compact')
+                                    .css('font-size', 'inherit');
+
+                            }
+                           
+                        },
+                        {
+                            extend: 'excel',
+                            title: 'Laporan Transaksi',
+                            className: 'btn btn-success'
+                        }
+                    ],
+                    lengthMenu: [5, 10, 25, 50], // Menentukan opsi "show entries"
+                    responsive: true, // Mengaktifkan responsivitas
+                    language: {
+                        search: "Search:",
+                        lengthMenu: "Show _MENU_ entries",
+                        info: "Showing _START_ to _END_ of _TOTAL_ entries",
+                        paginate: {
+                            first: "Pertama",
+                            last: "Terakhir",
+                            next: "Next",
+                            previous: "Previous"
+                        }
+                    }
+                });
+                var table = $('#exampleLaporanSaldo').DataTable({
+                    dom: '<"row"<"col-sm-12 mb-3"B>>' +
+                         '<"row"<"col-sm-6"l>>' + // Tampilkan show entries dan search
+                         '<"row"<"col-sm-12"tr>>' + // Tampilkan tabel
+                         '<"row"<"col-sm-5"i><"col-sm-7"p>>',  // Tampilkan informasi dan pagination
+                    buttons: [
+                        {
+                            extend: 'print',
+                            title: 'Laporan Transaksi',
+                            className: 'btn btn-light',
+                            customize: function(win) {
+                                // Tambahkan <tfoot> ke hasil print
+                                $(win.document.body).find('table')
+                                    .addClass('compact')
+                                    .css('font-size', 'inherit');
+
+                                var footer = $('#exampleLaporanSaldo tfoot').clone(); // Clone tfoot
+                                $(win.document.body).find('table').append(footer); // Tambahkan footer ke table print
+                            }
+                        },
+                        {
+                            extend: 'excel',
+                            title: 'Laporan Transaksi',
+                            className: 'btn btn-success',
+                            customize: function( xlsx ) {
+                                var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                                var footer = $('#exampleLaporanSaldo tfoot').clone().html(); // Ambil HTML footer
+
+                                // Tambahkan footer di bawah tabel
+                                $(sheet).find('row:last').after(footer);
+                            }
+                        }
+                        
+                    ],
+                    lengthMenu: [5, 10, 25, 50],
+                    responsive: true,
+                    language: {
+                        search: "Search:",
+                        lengthMenu: "Show _MENU_ entries",
+                        info: "Showing _START_ to _END_ of _TOTAL_ entries",
+                        paginate: {
+                            first: "Pertama",
+                            last: "Terakhir",
+                            next: "Next",
+                            previous: "Previous"
+                        }
+                    }
+                });
+
+
+
+
+            });
+        </script>
+
+        <script>
+        $(document).ready(function() {
+            // Inisialisasi untuk tabel pertama
+            $('#dataTable1').DataTable();
+            
+            // Inisialisasi untuk tabel kedua
+            $('#dataTable2').DataTable();
+        });   
        </script>
 
         <!-- <script>

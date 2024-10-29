@@ -7,12 +7,12 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                                    <h4 class="mb-sm-0 font-size-18">Informasi</h4>
+                                    <h4 class="mb-sm-0 font-size-18">Transaksi</h4>
 
                                     <div class="page-title-right">
                                         <ol class="breadcrumb m-0">
-                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Informasi</a></li>
-                                            <li class="breadcrumb-item active">Informasi</li>
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Transaksi</a></li>
+                                            <li class="breadcrumb-item active">Transaksi</li>
                                         </ol>
                                     </div>
 
@@ -58,11 +58,11 @@
                                                                     <td>Rp. <?= number_format($tr['nominal'], 0, ',', '.'); ?></td>
                                                                     <td><?= date('d/m/Y - H:i:s', strtotime($tr['tglTransaksi'])); ?></td>
                                                                     <td>
-                                                                        <a href="#" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i> Edit</a>
+                                                                        <!-- <a href="#" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i> Edit</a> -->
                                                                         <a href="<?= base_url('Admin/hapusTransaksi/' . $tr['nomorTransaksi']); ?>" 
                                                                            class="btn btn-danger btn-sm" 
                                                                            onclick="return confirm('Apakah Anda yakin ingin menghapus transaksi ini?');">
-                                                                           <i class="fas fa-trash"></i> Hapus
+                                                                           <i class="fas fa-trash"></i>
                                                                         </a>
                                                                     </td>
                                                                     

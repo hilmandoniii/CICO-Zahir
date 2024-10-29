@@ -357,6 +357,59 @@ class Admin extends CI_Controller {
     //     return $newCode;
     // }
 
+    // Laporan Transaksi
+    public function laporanTransaksi()
+    {
+        $data['judul'] = 'Laporan Transaksi';
+        $codeUser = $this->session->userdata('codeUser');
+        $data['user'] = $this->ModelUser->cekData(['username' => $this->session->userdata('username')])->row_array();
+        $data['laporanTransaksi'] = $this->ModelTransaksi->getLaporan($codeUser); // Mengambil data dengan detail kategori dan akun
+
+        $this->load->view('Admin/_part/head', $data);
+        $this->load->view('Admin/_part/topbar', $data);
+        $this->load->view('Admin/_part/sidebar', $data);
+        $this->load->view('Admin/laporan-transaksi', $data);
+        $this->load->view('Admin/_part/footer', $data);
+    }
+
+    // Laporan Saldo
+    public function laporanSaldo()
+    {
+        $data['judul'] = 'Laporan Saldo';
+        $codeUser = $this->session->userdata('codeUser');
+        $data['user'] = $this->ModelUser->cekData(['username' => $this->session->userdata('username')])->row_array();
+
+        $tanggalAwal = $this->input->get('tanggal_awal');
+        $tanggalAkhir = $this->input->get('tanggal_akhir');
+        $tipeAkun = $this->input->get('tipe_akun');
+        $data['laporanSaldo'] = $this->ModelTransaksi->getLaporanSaldo($codeUser, $tanggalAwal, $tanggalAkhir, $tipeAkun); // Mengambil data dengan detail kategori dan akun
+
+        $data['tipeAkunList'] = $this->ModelTransaksi->getTipeAkunByUser($codeUser);
+
+        $totalPemasukan = 0;
+        $totalPengeluaran = 0;
+
+        // Hitung total pemasukan dan pengeluaran
+        if (!empty($data['laporanSaldo'])) {
+            foreach ($data['laporanSaldo'] as $lt) {
+                if ($lt['tipeTransaksi'] == 'Pemasukan') {
+                    $totalPemasukan += $lt['nominal'];
+                } elseif ($lt['tipeTransaksi'] == 'Pengeluaran') {
+                    $totalPengeluaran += $lt['nominal'];
+                }
+            }
+        }
+
+        $data['totalPemasukan'] = $totalPemasukan;
+        $data['totalPengeluaran'] = $totalPengeluaran;
+
+        $this->load->view('Admin/_part/head', $data);
+        $this->load->view('Admin/_part/topbar', $data);
+        $this->load->view('Admin/_part/sidebar', $data);
+        $this->load->view('Admin/laporan-saldo', $data);
+        $this->load->view('Admin/_part/footer', $data);
+    }
+
 	public function kelolaProfil()
 	{
 		$data['judul'] = 'Kelola Profile';
