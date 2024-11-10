@@ -33,6 +33,7 @@
                                                         <th>No</th>
                                                         <th>Nama</th>
                                                         <th>Tipe</th>
+                                                        <th>Akun</th>
                                                         <th>Aksi</th>
                                                         
                                                       </tr>
@@ -45,6 +46,7 @@
                                                                     <td><?= $no++; ?></td>
                                                                     <td><?= $akun['namaAkun']; ?></td>
                                                                     <td><?= $akun['tipeAkun']; ?></td>
+                                                                    <td>Rp. <?= number_format($akun['saldoAkun'], 0, ',', '.'); ?></td>
                                                                     <td>
                                                                         
                                                                             <a href="<?= base_url('Admin/editAkun/' . $akun['kodeAkun']); ?>" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i> Edit</a>
@@ -108,6 +110,14 @@
                                             <input type="text" class="form-control" placeholder="Nama Akun" name="nama">
                                         </div>
                                         <?= form_error('nama','<small class="text-danger pl-3">', '</small>'); ?>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label>Saldo</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" placeholder="Saldo" name="saldo">
+                                        </div>
+                                        <?= form_error('saldo','<small class="text-danger pl-3">', '</small>'); ?>
                                     </div>
 
                                     <button type="submit" class="btn btn-primary">Submit</button>

@@ -82,6 +82,23 @@ class ModelAKun extends CI_Model
     }
 
 
+    //saldoakun
+    public function getSaldoAkun($kodeAkun)
+    {
+        $this->db->select('saldoAkun');
+        $this->db->where('kodeAkun', $kodeAkun);
+        $result = $this->db->get('akun')->row_array();
+        return $result['saldoAkun'] ?? 0;
+    }
+
+    public function updateSaldoAkun($kodeAkun, $newSaldo)
+    {
+        $this->db->set('saldoAkun', $newSaldo);
+        $this->db->where('kodeAkun', $kodeAkun);
+        $this->db->update('akun');
+    }
+
+
 
 
 

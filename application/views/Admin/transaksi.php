@@ -18,6 +18,7 @@
 
                                 </div>
                             </div>
+                            <?= $this->session->flashdata('pesan'); ?>
                         </div>
 
                         <div class="row">

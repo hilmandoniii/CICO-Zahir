@@ -36,7 +36,12 @@ class Admin extends CI_Controller {
         $data['akuns'] = $this->ModelAkun->getAkun($codeUser)->result_array();
 
         $this->form_validation->set_rules('nama', 'Nama Akun', 'required', [
-            'required' => 'Nama Akun Belum diis!!'
+            'required' => 'Nama Akun Belum diisi!!'
+        ]);
+
+        $this->form_validation->set_rules('saldo', 'Saldo', 'required|numeric',[
+            'required' => 'Nominal Belum diisi',
+            'numeric' => 'Nominal Harus Angka'
         ]);
 
         if ($this->form_validation->run() == false) {
@@ -54,6 +59,7 @@ class Admin extends CI_Controller {
                 'codeUser' => $codeUser,
                 'tipeAkun' => $this->input->post('tipeAkun', true),
                 'namaAkun' => $this->input->post('nama', true),
+                'saldoAkun' => $this->input->post('saldo', true),
                 'created_at' => date('Y-m-d H:i:s')
             ];
 
@@ -272,26 +278,45 @@ class Admin extends CI_Controller {
             $this->load->view('Admin/_part/footer', $data);
         } else {
             $nomerTransaksi = $this->generateNomorTransaksi($codeUser);
+            $kodeAkun = $this->input->post('kodeAkun', true);
+            $tipeTransaksi = $this->input->post('tipeTransaksi', true);
+            $nominal = $this->input->post('nominal', true);
 
-            // Ambil input tanggal dari form
-            $tglTransaksi = $this->input->post('tglTransaksi', true);
+            // Ambil saldoAkun saat ini
+            $currentSaldo = $this->ModelAkun->getSaldoAkun($kodeAkun);
 
-            // Gabungkan tanggal dari input dengan waktu (misal: waktu saat ini)
-            $tanggalLengkap = $tglTransaksi . ' ' . date('H:i:s');
+            if ($tipeTransaksi === 'Pemasukan') {
+                // Jika transaksi adalah pemasukan, tambahkan nominal ke saldoAkun
+                $newSaldo = $currentSaldo + $nominal;
+                $this->ModelAkun->updateSaldoAkun($kodeAkun, $newSaldo);
+            } elseif ($tipeTransaksi === 'Pengeluaran') {
+                // Jika transaksi adalah pengeluaran, cek apakah saldo mencukupi
+                if ($currentSaldo < $nominal) {
+                    // Jika saldo tidak mencukupi, tampilkan notifikasi dan batal simpan transaksi
+                    $this->session->set_flashdata('pesan', '<div class="alert alert-danger alert-message" role="alert">Saldo tidak mencukupi.</div>');
+                    redirect('Admin/transaksi');
+                    return;
+                } else {
+                    // Jika saldo mencukupi, kurangi saldoAkun
+                    $newSaldo = $currentSaldo - $nominal;
+                    $this->ModelAkun->updateSaldoAkun($kodeAkun, $newSaldo);
+                }
+            }
 
+            // Simpan data transaksi
             $data = [
                 'nomorTransaksi' => $nomerTransaksi,
                 'codeUser' => $codeUser,
-                'tglTransaksi' => $tanggalLengkap,
+                'tglTransaksi' => $this->input->post('tglTransaksi', true) . ' ' . date('H:i:s'),
                 'codeKat' => $this->input->post('codeKat', true),
-                'kodeAkun' => $this->input->post('kodeAkun', true),
-                'tipeTransaksi' => $this->input->post('tipeTransaksi', true),
-                'nominal' => $this->input->post('nominal', true),
+                'kodeAkun' => $kodeAkun,
+                'tipeTransaksi' => $tipeTransaksi,
+                'nominal' => $nominal,
                 'keterangan' => $this->input->post('keterangan', true)
             ];
 
             $this->ModelTransaksi->insertTransaksi($data);
-            $this->session->set_flashdata('success', 'Transaksi berhasil ditambahkan.');
+            $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-message" role="alert">Transaki berhasil ditambahkan.</div>');
             redirect('Admin/transaksi');
         }
 	}
