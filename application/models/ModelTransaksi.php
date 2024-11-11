@@ -4,20 +4,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class ModelTransaksi extends CI_Model 
 {
 
+    //transaksi
     public function insertTransaksi($data)
     {
         $this->db->insert('transaksi', $data);
     }
-
-	// public function getTransaksiWithDetails()
-    // {
-    //     $this->db->select('transaksi.*, kategori.namaKat, akun.namaAkun, akun.tipeAkun');
-    //     $this->db->from('transaksi');
-    //     $this->db->join('kategori', 'transaksi.codeKat = kategori.codeKat');
-    //     $this->db->join('akun', 'transaksi.kodeAkun = akun.kodeAkun');
-    //     $query = $this->db->get();
-    //     return $query->result_array();
-    // }
 
     public function getTransaksiWithDetails($codeUser)
     {
@@ -107,6 +98,27 @@ class ModelTransaksi extends CI_Model
         $this->db->from('akun');
         $this->db->where('codeUser', $codeUser);
         $this->db->group_by('tipeAkun');
+        return $this->db->get()->result_array();
+    }
+
+
+
+    //tansfer
+    public function insertTransfer($dataTransfer)
+    {
+        $this->db->insert('transfer', $dataTransfer);
+    }
+
+    public function getTransferData($codeUser)
+    {
+        // Mengambil data transfer dengan join tabel akun untuk sumber dan tujuan
+        $this->db->select('transfer.idTransfer, transfer.sumberAkun, transfer.tujuanAkun, transfer.nominal, transfer.tglTransfer, transfer.keterangan, akun_sumber.namaAkun as namaAkunSumber, akun_sumber.tipeAkun as tipeAkunSumber, akun_tujuan.namaAkun as namaAkunTujuan, akun_tujuan.tipeAkun as tipeAkunTujuan');
+        $this->db->from('transfer');
+        $this->db->join('akun as akun_sumber', 'akun_sumber.kodeAkun = transfer.sumberAkun', 'left');
+        $this->db->join('akun as akun_tujuan', 'akun_tujuan.kodeAkun = transfer.tujuanAkun', 'left');
+        $this->db->where('transfer.codeUser', $codeUser); // Filter berdasarkan user
+        $this->db->order_by('transfer.tglTransfer', 'DESC'); // Mengurutkan berdasarkan tanggal transfer
+
         return $this->db->get()->result_array();
     }
 

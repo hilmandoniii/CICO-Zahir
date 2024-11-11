@@ -183,21 +183,7 @@ class Admin extends CI_Controller {
 
         // Format kodeAkun baru
         return 'KA' . str_pad($newNumber, 2, '0', STR_PAD_LEFT) . '-' . $codeUser;
-        // $this->db->select('codeKat');
-        // $this->db->order_by('codeKat', 'DESC');
-        // $this->db->limit(1);
-        // $query = $this->db->get('kategori');
-
-        // if ($query->num_rows() > 0) {
-        //     $row = $query->row();
-        //     $lastCode = $row->codeKat;
-        //     $number = (int) substr($lastCode, 3) + 1;
-        //     $newCode = 'KAT' . sprintf('%03d', $number);
-        // } else {
-        //     $newCode = 'KAT001';
-        // }
-
-        // return $newCode;
+        
     }
 
     public function hapusKategori($codeKat)
@@ -363,24 +349,85 @@ class Admin extends CI_Controller {
         return 'TR' . str_pad($newNumber, 4, '0', STR_PAD_LEFT) . '-' . $codeUser;
     }
 
-    // private function generateNomorTransaksi()
-    // {
-    //     $this->db->select('nomerTransaksi');
-    //     $this->db->order_by('nomerTransaksi', 'DESC');
-    //     $this->db->limit(1);
-    //     $query = $this->db->get('transaksi');
+   
 
-    //     if ($query->num_rows() > 0) {
-    //         $row = $query->row();
-    //         $lastCode = $row->nomerTransaksi;
-    //         $number = (int) substr($lastCode, 2) + 1;
-    //         $newCode = 'TR' . sprintf('%04d', $number);
-    //     } else {
-    //         $newCode = 'TR0001';
-    //     }
 
-    //     return $newCode;
-    // }
+    // Function Transfer
+    public function transfer()
+    {
+        $data['judul'] = 'Transfer Antar Akun';
+        $codeUser = $this->session->userdata('codeUser');
+        $data['user'] = $this->ModelUser->cekData(['username' => $this->session->userdata('username')])->row_array();
+        $data['akuns'] = $this->ModelAkun->getAkun($codeUser)->result_array();
+
+        $data['transfers'] = $this->ModelTransaksi->getTransferData($codeUser);
+
+        $this->form_validation->set_rules('sumberAkun', 'Sumber Akun', 'required');
+        $this->form_validation->set_rules('tujuanAkun', 'Tujuan Akun', 'required');
+        $this->form_validation->set_rules('nominal', 'Nominal', 'required|numeric');
+
+        if ($this->form_validation->run() == false) {
+            $this->load->view('Admin/_part/head', $data);
+            $this->load->view('Admin/_part/topbar', $data);
+            $this->load->view('Admin/_part/sidebar', $data);
+            $this->load->view('Admin/transfer', $data);
+            $this->load->view('Admin/_part/footer', $data);
+        } else {
+            $idTransfer = $this->generateIdTransfer($codeUser);
+            $sumberAkun = $this->input->post('sumberAkun', true);
+            $tujuanAkun = $this->input->post('tujuanAkun', true);
+            $nominal = $this->input->post('nominal', true);
+
+            // Ambil saldo saat ini dari sumberAkun dan tujuanAkun
+            $currentSaldoSumber = $this->ModelAkun->getSaldoAkun($sumberAkun);
+            $currentSaldoTujuan = $this->ModelAkun->getSaldoAkun($tujuanAkun);
+
+            // Cek apakah saldo sumberAkun mencukupi untuk transfer
+            if ($currentSaldoSumber < $nominal) {
+                $this->session->set_flashdata('pesan', '<div class="alert alert-danger alert-message" role="alert">Saldo sumber akun tidak mencukupi.</div>');
+                redirect('Admin/transfer');
+                return;
+            }
+
+            // Jika saldo mencukupi, lakukan transfer
+            $newSaldoSumber = $currentSaldoSumber - $nominal;
+            $newSaldoTujuan = $currentSaldoTujuan + $nominal;
+
+            // Update saldo sumberAkun dan tujuanAkun
+            $this->ModelAkun->updateSaldoAkun($sumberAkun, $newSaldoSumber);
+            $this->ModelAkun->updateSaldoAkun($tujuanAkun, $newSaldoTujuan);
+
+            // Simpan data transfer
+            $dataTransfer = [
+                'idTransfer' => $idTransfer,
+                'codeUser' => $codeUser,
+                'sumberAkun' => $sumberAkun,
+                'tujuanAkun' => $tujuanAkun,
+                'nominal' => $nominal,
+                'keterangan' => $this->input->post('keterangan', true),
+                'tglTransfer' => date('Y-m-d H:i:s')
+            ];
+
+            $this->ModelTransaksi->insertTransfer($dataTransfer);
+            $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-message" role="alert">Transfer berhasil dilakukan.</div>');
+            redirect('Admin/transfer');
+        }
+
+        
+    }
+
+    private function generateIdTransfer($codeUser)
+    {
+        // Hitung jumlah transfer yang sudah ada untuk codeUser ini
+        $this->db->where('codeUser', $codeUser);
+        $totalTransfer = $this->db->count_all_results('transfer');
+
+        // Tambahkan 1 untuk mendapatkan nomor transfer baru
+        $newNumber = $totalTransfer + 1;
+
+        // Format idTransfer baru
+        return 'TF' . str_pad($newNumber, 4, '0', STR_PAD_LEFT) . '-' . $codeUser;
+    }
 
     // Laporan Transaksi
     public function laporanTransaksi()

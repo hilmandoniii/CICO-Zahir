@@ -30,67 +30,26 @@
                 </a>
             </li>
 
+            
+        </ul>
+
+        <ul class="metismenu list-unstyled" id="side-menu">
+            <li class="menu-title" data-key="t-menu">Transaksi</li>
+
             <li>
                 <a href="<?= base_url('Admin/transaksi'); ?>">
-                    <i data-feather="repeat"></i>
+                    <i data-feather="refresh-cw"></i>
                     <span data-key="t-transaksi">Transaksi</span>
                 </a>
             </li>
 
-
-            <!-- <li>
-                <a href="javascript: void(0);" class="has-arrow">
-                    <i data-feather="users"></i>
-                    <span data-key="t-authentication">Authentication</span>
+            <li>
+                <a href="<?= base_url('Admin/transfer'); ?>">
+                    <i data-feather="repeat"></i>
+                    <span data-key="t-transaksi">Transfer Antar Akun</span>
                 </a>
-                <ul class="sub-menu" aria-expanded="false">
-                    <li><a href="auth-login.html" data-key="t-login">Login</a></li>
-                    <li><a href="auth-register.html" data-key="t-register">Register</a></li>
-                  
-                </ul>
             </li>
 
-            <li>
-                <a href="javascript: void(0);" class="has-arrow">
-                    <i data-feather="file-text"></i>
-                    <span data-key="t-pages">Pages</span>
-                </a>
-                <ul class="sub-menu" aria-expanded="false">
-                    <li><a href="pages-starter.html" data-key="t-starter-page">Starter Page</a></li>
-                    <li><a href="pages-404.html" data-key="t-error-404">Error 404</a></li>
-                    
-                </ul>
-            </li> -->
-
-          
-            
-
-            
-
-           
-           
-
-            
-
-
-            
-
-            <!-- <li>
-                <a href="javascript: void(0);" class="has-arrow">
-                    <i data-feather="share-2"></i>
-                    <span data-key="t-multi-level">Multi Level</span>
-                </a>
-                <ul class="sub-menu" aria-expanded="true">
-                    <li><a href="javascript: void(0);" data-key="t-level-1-1">Level 1.1</a></li>
-                    <li>
-                        <a href="javascript: void(0);" class="has-arrow" data-key="t-level-1-2">Level 1.2</a>
-                        <ul class="sub-menu" aria-expanded="true">
-                            <li><a href="javascript: void(0);" data-key="t-level-2-1">Level 2.1</a></li>
-                            <li><a href="javascript: void(0);" data-key="t-level-2-2">Level 2.2</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </li> -->
 
         </ul>
 
