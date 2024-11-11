@@ -99,6 +99,45 @@ class ModelAKun extends CI_Model
     }
 
 
+    //
+    public function getKategoriTransfer($codeUser) 
+    {
+        $this->db->select('codeKat');
+        $this->db->from('kategori');
+        $this->db->where('namaKat', 'transfer');
+        $this->db->where('codeUser', $codeUser);
+        $query = $this->db->get();
+        return $query->row_array(); // Mengembalikan data kategori "transfer" jika ada
+    }
+
+
+    private function generateKodeKategori($codeUser)
+    {
+        // Hitung jumlah kategori yang sudah ada untuk codeUser ini
+        $this->db->where('codeUser', $codeUser);
+        $totalKat = $this->db->count_all_results('kategori');
+
+        // Tambahkan 1 untuk mendapatkan nomor kategori baru
+        $newNumber = $totalKat + 1;
+
+        // Format codeKat baru
+        return 'KA' . str_pad($newNumber, 2, '0', STR_PAD_LEFT) . '-' . $codeUser;
+    }
+
+    public function insertKategoriTransfer($codeUser) 
+    {
+        $newCodeKat = $this->generateKodeKategori($codeUser);
+        $data = [
+            'codeKat' => $newCodeKat,
+            'namaKat' => 'Transfer',
+            'codeUser' => $codeUser,
+            'created_at' => date('Y-m-d H:i:s')
+        ];
+        $this->db->insert('kategori', $data);
+        return $newCodeKat; // Mengembalikan codeKat baru untuk kategori "transfer"
+    }
+
+
 
 
 

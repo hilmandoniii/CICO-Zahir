@@ -409,6 +409,40 @@ class Admin extends CI_Controller {
             ];
 
             $this->ModelTransaksi->insertTransfer($dataTransfer);
+
+
+            // Cek apakah kategori "transfer" sudah ada
+            $kategoriTransfer = $this->ModelAkun->getKategoriTransfer($codeUser);
+            if (!$kategoriTransfer) {
+                // Jika belum ada, tambahkan kategori "transfer"
+                $kategoriTransfer['codeKat'] = $this->ModelAkun->insertKategoriTransfer($codeUser);
+            }
+
+            // Simpan data transaksi pengeluaran untuk sumberAkun
+            $dataTransaksiPengeluaran = [
+                'nomorTransaksi' => $this->generateNomorTransaksi($codeUser),
+                'codeUser' => $codeUser,
+                'tglTransaksi' => date('Y-m-d H:i:s'),
+                'codeKat' => $kategoriTransfer['codeKat'],
+                'kodeAkun' => $sumberAkun,
+                'tipeTransaksi' => 'Pengeluaran',
+                'nominal' => $nominal,
+                'keterangan' => 'Transfer ke akun ' . $tujuanAkun . ' - ' . $keterangan
+            ];
+            $this->ModelTransaksi->insertTransaksi($dataTransaksiPengeluaran);
+
+            // Simpan data transaksi pemasukan untuk tujuanAkun
+            $dataTransaksiPemasukan = [
+                'nomorTransaksi' => $this->generateNomorTransaksi($codeUser),
+                'codeUser' => $codeUser,
+                'tglTransaksi' => date('Y-m-d H:i:s'),
+                'codeKat' => $kategoriTransfer['codeKat'],
+                'kodeAkun' => $tujuanAkun,
+                'tipeTransaksi' => 'Pemasukan',
+                'nominal' => $nominal,
+                'keterangan' => 'Transfer dari akun ' . $sumberAkun . ' - ' . $keterangan
+            ];
+            $this->ModelTransaksi->insertTransaksi($dataTransaksiPemasukan);
             $this->session->set_flashdata('pesan', '<div class="alert alert-success alert-message" role="alert">Transfer berhasil dilakukan.</div>');
             redirect('Admin/transfer');
         }
