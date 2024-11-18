@@ -27,108 +27,280 @@
                         </div>
                         <!-- end page title -->
 
-                        <div class="row">
-                            <div class="col-xl-4 col-md-6">
-                                <!-- card -->
-                                <div class="card card-h-100">
-                                    <!-- card body -->
-                                    <div class="card-body">
-                                        <div class="row align-items-center">
-                                            <div class="col-6">
-                                                <span class="text-muted mb-3 lh-1 d-block text-truncate">Total Kas</span>
-                                                <h4 class="mb-3">
-                                                    $<span class="counter-value" data-target="865.2">0</span>k
-                                                </h4>
-                                            </div>
-
-                                            <!-- <div class="col-6">
-                                                <div id="mini-chart1" data-colors='["#5156be"]' class="apex-charts mb-2"></div>
-                                            </div> -->
-                                        </div>
-                                        <div class="text-nowrap">
-                                            <span class="badge bg-success-subtle text-success">+$20.9k</span>
-                                            <span class="ms-1 text-muted font-size-13">Since last week</span>
-                                        </div>
-                                    </div><!-- end card body -->
-                                </div><!-- end card -->
-                            </div><!-- end col -->
-        
-                            <div class="col-xl-4 col-md-6">
-                                <!-- card -->
-                                <div class="card card-h-100">
-                                    <!-- card body -->
-                                    <div class="card-body">
-                                        <div class="row align-items-center">
-                                            <div class="col-6">
-                                                <span class="text-muted mb-3 lh-1 d-block text-truncate">Pemasukan</span>
-                                                <h4 class="mb-3">
-                                                    $<span class="counter-value" data-target="625.8">0</span>k
-                                                </h4>
-                                            </div>
-                                            <!-- <div class="col-6">
-                                                <div id="mini-chart2" data-colors='["#5156be"]' class="apex-charts mb-2"></div>
-                                            </div> -->
-                                        </div>
-                                        <div class="text-nowrap">
-                                            <span class="badge bg-success-subtle text-success">+$20.9k</span>
-                                            <span class="ms-1 text-muted font-size-13">Since last week</span>
-                                        </div>
-                                    </div><!-- end card body -->
-                                </div><!-- end card -->
-                            </div><!-- end col-->
-        
-                            <div class="col-xl-4 col-md-6">
-                                <!-- card -->
-                                <div class="card card-h-100">
-                                    <!-- card body -->
-                                    <div class="card-body">
-                                        <div class="row align-items-center">
-                                            <div class="col-6">
-                                                <span class="text-muted mb-3 lh-1 d-block text-truncate">Pengeluaran</span>
-                                                <h4 class="mb-3">
-                                                    $<span class="counter-value" data-target="4.32">0</span>M
-                                                </h4>
-                                            </div>
-                                            <!-- <div class="col-6">
-                                                <div id="mini-chart3" data-colors='["#5156be"]' class="apex-charts mb-2"></div>
-                                            </div> -->
-                                        </div>
-                                        <div class="text-nowrap">
-                                            <span class="badge bg-danger-subtle text-danger">+$20.9k</span>
-                                            <span class="ms-1 text-muted font-size-13">Since last week</span>
-                                        </div>
-                                    </div><!-- end card body -->
-                                </div><!-- end card -->
-                            </div><!-- end col -->
-        
-                           <!-- <div class="col-xl-3 col-md-6">
-                                
-                                <div class="card card-h-100">
-                                    
-                                    <div class="card-body">
-                                        <div class="row align-items-center">
-                                            <div class="col-6">
-                                                <span class="text-muted mb-3 lh-1 d-block text-truncate">Profit Ration</span>
-                                                <h4 class="mb-3">
-                                                    <span class="counter-value" data-target="12.57">0</span>%
-                                                </h4>
-                                            </div>
-                                            <div class="col-6">
-                                                <div id="mini-chart4" data-colors='["#5156be"]' class="apex-charts mb-2"></div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <form method="get" action="">
+                                        <div class="row mb-3">
+                                            <div class="col-md-3">
+                                                <label for="tipe_akun">Pilih Tipe Akun</label>
+                                                <select name="tipe_akun" class="form-control" onchange="this.form.submit()">
+                                                    <option value="">Pilih Tipe Akun</option>
+                                                    <?php foreach ($tipeAkunList as $akun): ?>
+                                                        <option value="<?= $akun['tipeAkun'] ?>" <?= ($this->input->get('tipe_akun') == $akun['tipeAkun']) ? 'selected' : '' ?>>
+                                                            <?= $akun['tipeAkun'] ?>
+                                                        </option>
+                                                    <?php endforeach; ?>
+                                                </select>
                                             </div>
                                         </div>
-                                        <div class="text-nowrap">
-                                            <span class="badge bg-success-subtle text-success">+2.95%</span>
-                                            <span class="ms-1 text-muted font-size-13">Since last week</span>
-                                        </div>
-                                    </div>
+                                    </form>
                                 </div>
-                            </div> -->
+
+                                <div class="row">
+                                    <div class="col-xl-4 col-md-6">
+                                        <!-- card -->
+                                        <div class="card card-h-100">
+                                            <!-- card body -->
+                                            <div class="card-body">
+                                                <div class="row align-items-center">
+                                                    <div class="col-6">
+                                                        <span class="text-muted mb-3 lh-1 d-block text-truncate">Total Saldo</span>
+                                                        <h4 class="mb-3">
+                                                            <span>Rp <?= number_format($totalSaldo, 0, ',', '.') ?></span>
+                                                        </h4>
+                                                    </div>
+
+                                                    
+                                                </div>
+                                                <div class="text-nowrap">
+                                                    <span class="badge bg-success-subtle text-success">+$20.9k</span>
+                                                    <span class="ms-1 text-muted font-size-13">Since last week</span>
+                                                </div>
+                                            </div><!-- end card body -->
+                                        </div><!-- end card -->
+                                    </div><!-- end col -->
+                
+                                    <div class="col-xl-4 col-md-6">
+                                        <!-- card -->
+                                        <div class="card card-h-100">
+                                            <!-- card body -->
+                                            <div class="card-body">
+                                                <div class="row align-items-center">
+                                                    <div class="col-6">
+                                                        <span class="text-muted mb-3 lh-1 d-block text-truncate">Pemasukan</span>
+                                                        <h4 class="mb-3">
+                                                            <span>Rp <?= number_format($totalPemasukan, 0, ',', '.') ?></span>
+                                                        </h4>
+                                                    </div>
+                                                    
+                                                </div>
+                                                <div class="text-nowrap">
+                                                    <span class="badge bg-success-subtle text-success">+$20.9k</span>
+                                                    <span class="ms-1 text-muted font-size-13">Since last week</span>
+                                                </div>
+                                            </div><!-- end card body -->
+                                        </div><!-- end card -->
+                                    </div><!-- end col-->
+                
+                                    <div class="col-xl-4 col-md-6">
+                                        <!-- card -->
+                                        <div class="card card-h-100">
+                                            <!-- card body -->
+                                            <div class="card-body">
+                                                <div class="row align-items-center">
+                                                    <div class="col-6">
+                                                        <span class="text-muted mb-3 lh-1 d-block text-truncate">Pengeluaran</span>
+                                                        <h4 class="mb-3">
+                                                            <span>Rp <?= number_format($totalPengeluaran, 0, ',', '.') ?></span>
+                                                        </h4>
+                                                    </div>
+                                                    
+                                                </div>
+                                                <div class="text-nowrap">
+                                                    <span class="badge bg-danger-subtle text-danger">+$20.9k</span>
+                                                    <span class="ms-1 text-muted font-size-13">Since last week</span>
+                                                </div>
+                                            </div><!-- end card body -->
+                                        </div><!-- end card -->
+                                    </div><!-- end col -->
+                                </div>
+
+                            </div>
                         </div><!-- end row-->
 
                         <div class="row">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header align-items-center d-flex">
+                                        <h4 class="card-title mb-0 flex-grow-1">Transaksi</h4>
+                                        <div class="flex-shrink-0">
+                                            <ul class="nav justify-content-end nav-tabs-custom rounded card-header-tabs" role="tablist">
+                                                <li class="nav-item">
+                                                    <a class="nav-link active" data-bs-toggle="tab" href="#transactions-all-tab" role="tab">
+                                                        Semua 
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" data-bs-toggle="tab" href="#transactions-buy-tab" role="tab">
+                                                        Pemasukan 
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" data-bs-toggle="tab" href="#transactions-sell-tab" role="tab">
+                                                        Pengeluaran  
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                            <!-- end nav tabs -->
+                                        </div>
+                                    </div><!-- end card header -->
 
-                            <div class="col-md-12">
+                                    <div class="card-body px-0">
+                                        <div class="tab-content">
+                                            <div class="tab-pane active" id="transactions-all-tab" role="tabpanel">
+                                                <div class="table-responsive px-3" data-simplebar style="max-height: 352px;">
+                                                    <table class="table align-middle table-nowrap table-borderless">
+                                                        <tbody>
+                                                            <?php foreach ($transaksi as $trans): ?>
+                                                            <tr>
+                                                               <td style="width: 50px;">
+                                                                    <?php if ($trans['tipeTransaksi'] === 'Pemasukan'): ?>
+                                                                        <div class="font-size-22 text-success">
+                                                                            <i class="bx bx-up-arrow-circle d-block"></i>
+                                                                        </div>
+                                                                    <?php elseif ($trans['tipeTransaksi'] === 'Pengeluaran'): ?>
+                                                                        <div class="font-size-22 text-danger">
+                                                                            <i class="bx bx-down-arrow-circle d-block"></i>
+                                                                        </div>
+                                                                    <?php endif; ?>
+                                                                </td>
+
+                                                                <td>
+                                                                    <div>
+                                                                        <h5 class="font-size-14 mb-1"><?= $trans['namaAkun']; ?></h5>
+                                                                        <p class="text-muted mb-0 font-size-12"><?= $trans['tipeAkun']; ?></p>
+                                                                    </div>
+                                                                </td>
+
+                                                                <td>
+                                                                    <div>
+                                                                        <h5 class="font-size-14 mb-1"><?= ucfirst($trans['tipeTransaksi']); ?></h5>
+                                                                        <p class="text-muted mb-0 font-size-12"><?= $trans['tglTransaksi']; ?></p>
+                                                                    </div>
+                                                                </td>
+
+                                                                <td>
+                                                                    <div class="text-end">
+                                                                        <h5 class="font-size-14 mb-0"><?= $trans['namaKat']; ?></h5>
+                                                                        <p class="text-muted mb-0 font-size-12">Kategori</p>
+                                                                    </div>
+                                                                </td>
+
+                                                                <td>
+                                                                    <div class="text-end">
+                                                                        <h5 class="font-size-14 mb-0">Rp. <?= number_format($trans['nominal'], 0, ',', '.'); ?></h5>
+                                                                        <p class="mb-0 font-size-12">Nominal</p>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            <?php endforeach; ?>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <!-- end tab pane -->
+                                            <div class="tab-pane" id="transactions-buy-tab" role="tabpanel">
+                                                <div class="table-responsive px-3" data-simplebar style="max-height: 352px;">
+                                                    <table class="table align-middle table-nowrap table-borderless">
+                                                        <tbody>
+                                                            <?php foreach ($pemasukan as $trans): ?>
+                                                                <tr>
+                                                                    <td style="width: 50px;">
+                                                                        <div class="font-size-22 text-success">
+                                                                            <i class="bx bx-up-arrow-circle d-block"></i>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div>
+                                                                            <h5 class="font-size-14 mb-1"><?= $trans['namaAkun']; ?></h5>
+                                                                            <p class="text-muted mb-0 font-size-12"><?= $trans['tipeAkun']; ?></p>
+                                                                        </div>
+                                                                    </td>
+
+                                                                    <td>
+                                                                        <div>
+                                                                            <h5 class="font-size-14 mb-1"><?= ucfirst($trans['tipeTransaksi']); ?></h5>
+                                                                            <p class="text-muted mb-0 font-size-12"><?= $trans['tglTransaksi']; ?></p>
+                                                                        </div>
+                                                                    </td>
+
+                                                                    <td>
+                                                                        <div class="text-end">
+                                                                            <h5 class="font-size-14 mb-0"><?= $trans['namaKat']; ?></h5>
+                                                                            <p class="text-muted mb-0 font-size-12">Kategori</p>
+                                                                        </div>
+                                                                    </td>
+
+                                                                    <td>
+                                                                        <div class="text-end">
+                                                                            <h5 class="font-size-14 mb-0">Rp. <?= number_format($trans['nominal'], 0, ',', '.'); ?></h5>
+                                                                            <p class="mb-0 font-size-12">Nominal</p>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            <?php endforeach; ?>
+                                                            
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <!-- end tab pane -->
+                                            <div class="tab-pane" id="transactions-sell-tab" role="tabpanel">
+                                                <div class="table-responsive px-3" data-simplebar style="max-height: 352px;">
+                                                    <table class="table align-middle table-nowrap table-borderless">
+                                                        <tbody>
+                                                            <?php foreach ($pengeluaran as $trans): ?>
+                                                                <tr>
+                                                                    <td style="width: 50px;">
+                                                                        <div class="font-size-22 text-danger">
+                                                                            <i class="bx bx-down-arrow-circle d-block"></i>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div>
+                                                                            <h5 class="font-size-14 mb-1"><?= $trans['namaAkun']; ?></h5>
+                                                                            <p class="text-muted mb-0 font-size-12"><?= $trans['tipeAkun']; ?></p>
+                                                                        </div>
+                                                                    </td>
+
+                                                                    <td>
+                                                                        <div>
+                                                                            <h5 class="font-size-14 mb-1"><?= ucfirst($trans['tipeTransaksi']); ?></h5>
+                                                                            <p class="text-muted mb-0 font-size-12"><?= $trans['tglTransaksi']; ?></p>
+                                                                        </div>
+                                                                    </td>
+
+                                                                    <td>
+                                                                        <div class="text-end">
+                                                                            <h5 class="font-size-14 mb-0"><?= $trans['namaKat']; ?></h5>
+                                                                            <p class="text-muted mb-0 font-size-12">Kategori</p>
+                                                                        </div>
+                                                                    </td>
+
+                                                                    <td>
+                                                                        <div class="text-end">
+                                                                            <h5 class="font-size-14 mb-0">Rp. <?= number_format($trans['nominal'], 0, ',', '.'); ?></h5>
+                                                                            <p class="mb-0 font-size-12">Nominal</p>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            <?php endforeach; ?>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <!-- end tab pane -->
+                                        </div>
+                                        <!-- end tab content -->
+                                    </div>
+                                    <!-- end card body -->
+                                </div>
+                                <!-- end card -->
+                            </div>
+                            <!-- end col -->
+
+                            <div class="col-md-6">
                                 <div class="card">
                                     <div class="card-header align-items-center d-flex">
                                         <h4 class="card-title mb-0 flex-grow-1">Catatan Transaksi</h4>

@@ -22,6 +22,19 @@ class ModelTransaksi extends CI_Model
         return $query->result_array(); // Mengembalikan hasil sebagai array
     }
 
+    public function getTransactionsByType($codeUser, $type)
+    {
+        $this->db->select('transaksi.*, kategori.namaKat, akun.namaAkun, akun.tipeAkun');
+        $this->db->from('transaksi');
+        $this->db->join('kategori', 'transaksi.codeKat = kategori.codeKat');
+        $this->db->join('akun', 'transaksi.kodeAkun = akun.kodeAkun');
+        $this->db->where('akun.codeUser', $codeUser);
+        $this->db->where('transaksi.tipeTransaksi', $type);
+        $query = $this->db->get();
+
+        return $query->result_array();
+    }
+
     public function generateNomorTransaksi()
     {
         $this->db->select('RIGHT(nomorTransaksi, 4) as nomor', FALSE);
@@ -92,6 +105,7 @@ class ModelTransaksi extends CI_Model
         return $this->db->get()->result_array();
     }
 
+    // Ambil tipeAkun berdasarkan codeUser yang login
     public function getTipeAkunByUser($codeUser)
     {
         $this->db->select('tipeAkun');
@@ -99,6 +113,34 @@ class ModelTransaksi extends CI_Model
         $this->db->where('codeUser', $codeUser);
         $this->db->group_by('tipeAkun');
         return $this->db->get()->result_array();
+    }
+
+    // kalkulasi saldo akun berdasarkan tipeAkun
+    public function getTotalSaldoByTipeAkun($codeUser, $tipeAkun = null)
+    {
+        $this->db->select_sum('saldoAkun');
+        $this->db->from('akun');
+        $this->db->where('codeUser', $codeUser);
+        if ($tipeAkun) {
+            $this->db->where('tipeAkun', $tipeAkun);
+        }
+        $query = $this->db->get();
+        return $query->row()->saldoAkun ?: 0;
+    }
+
+    // kalkulasi pemasukan & pengeluaran berdasarkan tipeAkun
+    public function getTransactionsByTypeAccount($codeUser, $tipeTransaksi, $tipeAkun = null)
+    {
+        $this->db->select_sum('nominal');
+        $this->db->from('transaksi');
+        $this->db->join('akun', 'transaksi.kodeAkun = akun.kodeAkun');
+        $this->db->where('akun.codeUser', $codeUser);
+        $this->db->where('transaksi.tipeTransaksi', $tipeTransaksi);
+        if ($tipeAkun) {
+            $this->db->where('akun.tipeAkun', $tipeAkun);
+        }
+        $query = $this->db->get();
+        return $query->row()->nominal ?: 0;
     }
 
 
@@ -120,6 +162,23 @@ class ModelTransaksi extends CI_Model
         $this->db->order_by('transfer.tglTransfer', 'DESC'); // Mengurutkan berdasarkan tanggal transfer
 
         return $this->db->get()->result_array();
+    }
+
+    //ambil kalkulasi nominal pemasukan dan pengeluaran
+    public function get_total_by_type($tipeTransaksi)
+    {
+        $this->db->select_sum('nominal');
+        $this->db->where('tipeTransaksi', $tipeTransaksi);
+        $query = $this->db->get('transaksi');
+        return $query->row()->nominal ?: 0; // Jika hasil null, kembalikan 0
+    }
+
+    //ambil kalkulasi totalsaldo
+    public function get_total_saldo()
+    {
+        $this->db->select_sum('saldoAkun');
+        $query = $this->db->get('akun');
+        return $query->row()->saldoAkun ?: 0; // Jika hasil null, kembalikan 0
     }
 
 

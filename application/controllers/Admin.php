@@ -15,7 +15,20 @@ class Admin extends CI_Controller {
 	public function index()
 	{
 		$data['judul'] = 'Dashboard';
+        $codeUser = $this->session->userdata('codeUser');
 		$data['user'] = $this->ModelUser->cekData(['username' => $this->session->userdata('username')])->row_array();
+        $data['tipeAkunList'] = $this->ModelTransaksi->getTipeAkunByUser($codeUser);
+        $tipeAkun = $this->input->get('tipe_akun') ?: null;
+
+        // Hitung total saldo, pemasukan, dan pengeluaran berdasarkan tipe akun
+        $data['totalSaldo'] = $this->ModelTransaksi->getTotalSaldoByTipeAkun($codeUser, $tipeAkun);
+        $data['totalPemasukan'] = $this->ModelTransaksi->getTransactionsByTypeAccount($codeUser, 'pemasukan', $tipeAkun);
+        $data['totalPengeluaran'] = $this->ModelTransaksi->getTransactionsByTypeAccount($codeUser, 'pengeluaran', $tipeAkun);
+
+        $data['transaksi'] = $this->ModelTransaksi->getTransaksiWithDetails($codeUser); // Mengambil data dengan detail kategori dan akun
+        $data['pemasukan'] = $this->ModelTransaksi->getTransactionsByType($codeUser, 'pemasukan');
+        $data['pengeluaran'] = $this->ModelTransaksi->getTransactionsByType($codeUser, 'pengeluaran');
+
 
 		$this->load->view('Admin/_part/head', $data);
         $this->load->view('Admin/_part/topbar', $data);

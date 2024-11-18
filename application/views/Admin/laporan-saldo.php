@@ -37,10 +37,10 @@
                                                     <select name="tipe_akun" class="form-control">
                                                         <option value="">Pilih Tipe Akun</option>
                                                                 <?php foreach ($tipeAkunList as $akun): ?>
-                                                            <option value="<?= $akun['tipeAkun'] ?>" <?= (isset($_GET['tipe_akun']) && $_GET['tipe_akun'] == $akun['tipeAkun']) ? 'selected' : '' ?>>
-                                                                        <?= $akun['tipeAkun'] ?>
-                                                            </option>
-                                                        <?php endforeach; ?>
+                                                                    <option value="<?= $akun['tipeAkun'] ?>" <?= (isset($_GET['tipe_akun']) && $_GET['tipe_akun'] == $akun['tipeAkun']) ? 'selected' : '' ?>>
+                                                                                <?= $akun['tipeAkun'] ?>
+                                                                    </option>
+                                                                <?php endforeach; ?>
                                                     </select>
                                                 </div>
                                                 <div class="col-md-3 align-self-end">
